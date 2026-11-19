@@ -14,6 +14,7 @@ namespace Configs {
     class IpScansRepo;
     class TrafficStatsRepo;
     class MarkersRepo;
+    class WarpExitRepo;
 
     void initDB(const std::string& dbPath);
 
@@ -43,6 +44,7 @@ namespace Configs {
         std::unique_ptr<MarkersRepo> markersRepo;
         std::unique_ptr<IpListsRepo> ipListsRepo;
         std::unique_ptr<IpScansRepo> ipScansRepo;
+        std::unique_ptr<WarpExitRepo> warpExitRepo;
 
         explicit DatabaseManager(const std::string& dbPath);
         ~DatabaseManager() = default;
