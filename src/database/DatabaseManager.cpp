@@ -6,6 +6,7 @@
 #include "include/database/ProfilesRepo.h"
 #include "include/database/RoutesRepo.h"
 #include "include/database/TrafficStatsRepo.h"
+#include "include/database/WarpExitRepo.h"
 
 #include "include/global/Configs.hpp"
 #include "include/global/Logger.hpp"
@@ -140,6 +141,7 @@ namespace Configs {
         ipListsRepo = std::make_unique<IpListsRepo>(scanDb);
         ipScansRepo = std::make_unique<IpScansRepo>(scanDb);
         ipScansRepo->NormalizeInterrupted();
+        warpExitRepo = std::make_unique<WarpExitRepo>(db);
     }
 
     void DatabaseManager::applyMigrations() {
