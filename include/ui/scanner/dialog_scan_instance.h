@@ -175,6 +175,7 @@ private:
     [[nodiscard]] int selectedConfigProfile() const;
 
     void reloadWarpProfiles(int selectId);
+    void reloadWarpFronts(int selectId);
 
     [[nodiscard]] QString currentWarpMode() const;
 

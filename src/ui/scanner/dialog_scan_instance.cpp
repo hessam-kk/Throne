@@ -544,6 +544,7 @@ void DialogScanInstance::buildWarpPhase() {
     phasesUi->warp_identity->addItem(tr("Dedicated for this scan (recommended)"), QStringLiteral("generated"));
     phasesUi->warp_identity->addItem(tr("From a profile"), QStringLiteral("profile"));
     phasesUi->warp_identity->addItem(tr("Built-in WARP settings"), QStringLiteral("builtin"));
+    reloadWarpFronts(-1);
     scanInstanceSetupNumber(phasesUi->warp_mtu, 576, 9000, defaults.warp.mtu, kScanInstanceMtuPresets);
     scanInstanceSetupNumber(phasesUi->warp_jc, 0, 128, defaults.warp.jc);
     scanInstanceSetupNumber(phasesUi->warp_jmin, 0, 1280, defaults.warp.jmin);
@@ -791,6 +792,7 @@ void DialogScanInstance::loadForm() {
         scanInstanceSelectData(phasesUi->warp_http_mode, warp.httpMode);
         scanInstanceSelectData(phasesUi->warp_identity, warp.identity);
         reloadWarpProfiles(warp.profileId);
+        reloadWarpFronts(warp.frontProfileId);
         phasesUi->warp_mtu->setText(QString::number(warp.mtu));
         phasesUi->warp_sni->setText(warp.sni);
         phasesUi->warp_quic_opener->setChecked(warp.quicOpener);
@@ -948,6 +950,7 @@ bool DialogScanInstance::collect(Configs::ScanConfig &out, int &baseListId, QStr
         if (!number(phasesUi->warp_timeout, warp.timeoutMs, true, tr("WARP Test: the timeout must be between %1 and %2 ms.")))
             return false;
         warp.warmLatency = phasesUi->warp_warm->isChecked();
+        warp.frontProfileId = phasesUi->warp_front->currentData().toInt();
         if (amnezia && warp.jmin > warp.jmax) return fail(tr("WARP Test: Jmin must not be larger than Jmax."));
     }
 
@@ -1180,6 +1183,26 @@ void DialogScanInstance::reloadWarpProfiles(int selectId) {
     phasesUi->warp_profile->addItem(tr("Select a profile…"), -1);
     for (const auto &[id, profileName] : profiles->GetProfileIDNameMappedBatch(ids)) phasesUi->warp_profile->addItem(profileName, id);
     scanInstanceSelectData(phasesUi->warp_profile, selectId);
+}
+
+void DialogScanInstance::reloadWarpFronts(int selectId) {
+    if (!isWarp()) return;
+    const QScopedValueRollback guard(loading, true);
+    auto *profiles = Configs::dataManager->profilesRepo.get();
+
+    QList<int> ids;
+    for (const auto &entry : profiles->GetAllProfileIDNameMapped()) ids << entry.first;
+
+    phasesUi->warp_front->clear();
+    phasesUi->warp_front->addItem(tr("Direct (no proxy)"), -1);
+    for (const auto &profile : profiles->GetProfileBatch(ids)) {
+        if (profile == nullptr || profile->outbound == nullptr) continue;
+        if (profile->Chain() != nullptr || profile->AutoSelector() != nullptr) continue;
+        if (!profile->outbound->HasServerEndpoint()) continue;
+        if (profile->outbound->IsExtraCore() || profile->outbound->IsXrayFullConfig()) continue;
+        phasesUi->warp_front->addItem(profile->name, profile->id);
+    }
+    scanInstanceSelectData(phasesUi->warp_front, selectId);
 }
 
 QString DialogScanInstance::currentWarpMode() const {

@@ -5587,6 +5587,10 @@ Close without saving?</source>
 
 不保存就关闭吗?</translation>
     </message>
+    <message>
+        <source>Direct (no proxy)</source>
+        <translation>直接连接（不使用代理）</translation>
+    </message>
 </context>
 <context>
     <name>DialogScanner</name>
@@ -13426,6 +13430,10 @@ Windows 随后会忽略让 Throne 自身连接不进入 Tun 的适配器绑定�
         <source>Extra Core</source>
         <translation>额外核心</translation>
     </message>
+    <message>
+        <source>The profile dialed in front of the scan cannot be used</source>
+        <translation>无法使用在扫描前方拨出的配置档</translation>
+    </message>
 </context>
 <context>
     <name>QPlatformTheme</name>
@@ -14415,6 +14423,10 @@ Remove that endpoint from this routing profile as well?</source>
     <message>
         <source>Time limit per resolver. Empty: the test&apos;s default.</source>
         <translation>每个 DNS 解析器的时间限制。留空：使用测试的默认值。</translation>
+    </message>
+    <message>
+        <source>Dial through</source>
+        <translation>经由此配置拨出</translation>
     </message>
 </context>
 <context>

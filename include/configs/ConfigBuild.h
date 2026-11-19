@@ -133,8 +133,14 @@ namespace Configs
     // Checks a throwaway copy so the live profile's latency is never touched; empty = valid.
     QString ValidateScanBase(const std::shared_ptr<Profile> &base);
 
+    struct ScanTestOptions {
+        // Profiles dialed in front of the scanned endpoint, in-to-out; empty = dial it from this machine.
+        QList<int> frontHopIds;
+    };
+
     // Worker thread only; group landing/front hops are not applied.
-    ScanTestBuild BuildScanTestConfig(const std::shared_ptr<Profile> &base, const QList<ScanTestTarget> &targets);
+    ScanTestBuild BuildScanTestConfig(const std::shared_ptr<Profile> &base, const QList<ScanTestTarget> &targets,
+                                      const ScanTestOptions &options = {});
 
     struct ChainStepProbe {
         // Index into the top-to-bottom hop list; hops.size() stands for the group's landing proxy.

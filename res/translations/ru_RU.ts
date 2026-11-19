@@ -5669,6 +5669,10 @@ Close without saving?</source>
         <source>Save the selected variant into the profile.</source>
         <translation>Сохранить выбранный вариант в профиль.</translation>
     </message>
+    <message>
+        <source>Direct (no proxy)</source>
+        <translation>Напрямую (без прокси)</translation>
+    </message>
 </context>
 <context>
     <name>DialogScanner</name>
@@ -13461,6 +13465,10 @@ To fix this, share the hotspot from the throne-tun adapter instead of &quot;%1&q
         <source>Extra Core</source>
         <translation>Доп. ядро</translation>
     </message>
+    <message>
+        <source>The profile dialed in front of the scan cannot be used</source>
+        <translation>Невозможно использовать профиль, через который выполняется сканирование</translation>
+    </message>
 </context>
 <context>
     <name>QPlatformTheme</name>
@@ -14489,6 +14497,10 @@ Remove that endpoint from this routing profile as well?</source>
     <message>
         <source>Time limit per resolver. Empty: the test&apos;s default.</source>
         <translation>Ограничение времени на один резолвер. Пусто: значение по умолчанию для проверки.</translation>
+    </message>
+    <message>
+        <source>Dial through</source>
+        <translation>Подключаться через</translation>
     </message>
 </context>
 <context>

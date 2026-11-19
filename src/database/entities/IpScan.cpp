@@ -110,6 +110,7 @@ namespace Configs {
         warpObject["httpMode"] = warp.httpMode;
         warpObject["identity"] = warp.identity;
         warpObject["profileId"] = warp.profileId;
+        warpObject["frontProfileId"] = warp.frontProfileId;
         warpObject["generatedIdentity"] = warp.generatedIdentity;
         warpObject["generatedMode"] = warp.generatedMode;
         warpObject["mtu"] = warp.mtu;
@@ -227,6 +228,7 @@ namespace Configs {
         ipScanReadInt(warpObject, "httpMode", warp.httpMode, 0, 2);
         ipScanReadChoice(warpObject, "identity", warp.identity, {"generated", "profile", "builtin"});
         ipScanReadInt(warpObject, "profileId", warp.profileId, -1, std::numeric_limits<int>::max());
+        ipScanReadInt(warpObject, "frontProfileId", warp.frontProfileId, -1, std::numeric_limits<int>::max());
         if (const auto v = warpObject.value(QLatin1String("generatedIdentity")); v.isObject())
             warp.generatedIdentity = v.toObject();
         ipScanReadChoice(warpObject, "generatedMode", warp.generatedMode, {"", "wireguard", "masque"});

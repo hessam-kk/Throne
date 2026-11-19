@@ -62,6 +62,8 @@ namespace Configs {
         // generated | profile | builtin
         QString identity = QStringLiteral("generated");
         int profileId = -1;
+        // Dial the scanned endpoint through this profile instead of straight from this machine; -1 = direct.
+        int frontProfileId = -1;
         // Bean ExportToJson of the device registered for this scan; "wireguard" or "masque" in generatedMode.
         QJsonObject generatedIdentity;
         QString generatedMode;

@@ -1169,6 +1169,10 @@ To fix this, share the hotspot from the throne-tun adapter instead of &quot;%1&q
         <source>Settings</source>
         <translation>تنظیمات</translation>
     </message>
+    <message>
+        <source>The profile dialed in front of the scan cannot be used</source>
+        <translation>نمی‌توان از پروفایلی که پیش از اسکن استفاده می‌شود استفاده کرد</translation>
+    </message>
 </context>
 <context>
     <name>DialogAbout</name>
@@ -3571,6 +3575,10 @@ Close without saving?</source>
     <message>
         <source>Rescan current results</source>
         <translation>اسکن دوبارهٔ نتایج فعلی</translation>
+    </message>
+    <message>
+        <source>Direct (no proxy)</source>
+        <translation>مستقیم (بدون پروکسی)</translation>
     </message>
 </context>
 <context>
@@ -6449,6 +6457,10 @@ Remove that endpoint from this routing profile as well?</source>
     <message>
         <source>Time limit per resolver. Empty: the test&apos;s default.</source>
         <translation>سقف زمان برای هر ریزالور. خالی: پیش‌فرض تست.</translation>
+    </message>
+    <message>
+        <source>Dial through</source>
+        <translation>اتصال از طریق</translation>
     </message>
 </context>
 <context>

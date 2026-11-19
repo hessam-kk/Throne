@@ -749,7 +749,10 @@ namespace Scanner {
             targets.reserve(batch.size());
             for (const auto &candidate : batch) targets << Configs::ScanTestTarget{candidate.address, candidate.port};
 
-            const auto build = Configs::BuildScanTestConfig(base_, targets);
+            Configs::ScanTestOptions testOptions;
+            if (scan_.kind == Configs::IpScan::Kind::Warp && scan_.config.warp.frontProfileId >= 0)
+                testOptions.frontHopIds = {scan_.config.warp.frontProfileId};
+            const auto build = Configs::BuildScanTestConfig(base_, targets, testOptions);
             if (!build.error.isEmpty()) return build.error;
             const auto configPort = [this](const ProbeOutcome &candidate) {
                 return candidate.port > 0 ? candidate.port : basePort_;

@@ -349,7 +349,8 @@ namespace Configs {
         return QObject::tr("The profile is not valid; the log has the details");
     }
 
-    ScanTestBuild BuildScanTestConfig(const std::shared_ptr<Profile> &base, const QList<ScanTestTarget> &targets)
+    ScanTestBuild BuildScanTestConfig(const std::shared_ptr<Profile> &base, const QList<ScanTestTarget> &targets,
+                                      const ScanTestOptions &options)
     {
         const GenerateEndpointScope endpointScope;
         ScanTestBuild out;
@@ -365,6 +366,16 @@ namespace Configs {
             const auto exitHop = chain->list.size() == 1 ? dialedHop : scanChainHop(chain->list.last());
             exitType = exitHop != nullptr ? exitHop->type : QString();
         }
+        // A hop dialed in front of the scanned endpoint keeps its own settings; the target replaces the endpoint only.
+        for (const int hopId : options.frontHopIds) {
+            const auto hop = scanChainHop(hopId);
+            if (hop == nullptr || hop->outbound == nullptr || hop->type == QLatin1String("chain") ||
+                hop->type == QLatin1String("autoselector") || hop->outbound->IsExtraCore() ||
+                hop->outbound->IsXrayFullConfig()) {
+                out.error = QObject::tr("The profile dialed in front of the scan cannot be used");
+                return out;
+            }
+        }
 
         QHash<int, std::shared_ptr<Profile>> overrides;
         QHash<int, int> synth2target;
@@ -373,7 +384,22 @@ namespace Configs {
         for (int i = 0; i < targets.size(); ++i) {
             const auto &target = targets[i];
             std::shared_ptr<Profile> item;
-            if (chain != nullptr) {
+            if (!options.frontHopIds.isEmpty()) {
+                // The scanned endpoint is the exit hop, so the wrapper chain dials the fronts as they are.
+                auto exitHop = CloneProfileWithServer(base, target.address, target.port);
+                auto wrapper = exitHop == nullptr ? nullptr : ProfilesRepo::NewProfile(QStringLiteral("chain"));
+                auto *wrapperChain = wrapper == nullptr ? nullptr : wrapper->Chain();
+                if (wrapperChain == nullptr) {
+                    out.unsupported << i;
+                    continue;
+                }
+                exitHop->id = nextId--;
+                overrides.insert(exitHop->id, exitHop);
+                wrapperChain->list = options.frontHopIds;
+                wrapperChain->list << exitHop->id;
+                wrapper->name = QStringLiteral("WARP scan");
+                item = wrapper;
+            } else if (chain != nullptr) {
                 if (auto hop = CloneProfileWithServer(dialedHop, target.address, target.port); hop != nullptr) {
                     item = scanDeepClone(base);
                     if (item != nullptr && item->Chain() != nullptr) {
