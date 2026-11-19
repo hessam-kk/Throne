@@ -228,6 +228,7 @@ set(PROJECT_SOURCES
         src/ui/mainWindow/mainwindow_log.cpp
         src/ui/mainWindow/mainwindow_icons.cpp
         src/ui/mainWindow/mainwindow_menus.cpp
+        src/ui/mainWindow/mainwindow_warp_rotate.cpp
         src/ui/mainWindow/mainwindow_hotkeys.cpp
         src/ui/mainWindow/mainwindow_palette.cpp
         src/ui/mainWindow/mainwindow_profile_lifecycle.cpp
@@ -444,6 +445,9 @@ set(PROJECT_SOURCES
         src/ui/setting/dialog_manage_routes.cpp
         include/ui/setting/dialog_manage_routes.h
         include/ui/setting/dialog_manage_routes.ui
+
+        src/ui/setting/dialog_warp_blacklist.cpp
+        include/ui/setting/dialog_warp_blacklist.h
 
         src/ui/setting/dialog_vpn_settings.cpp
         include/ui/setting/dialog_vpn_settings.h
@@ -709,6 +713,7 @@ set(PROJECT_SOURCES
         include/database/SettingsRepo.h
         include/database/TrafficStatsRepo.h
         include/database/MarkersRepo.h
+        include/database/WarpExitRepo.h
 
         include/database/entities/Profile.h
         include/database/entities/Group.h
@@ -736,6 +741,7 @@ set(PROJECT_SOURCES
         src/database/IpScansRepo.cpp
         src/database/TrafficStatsRepo.cpp
         src/database/MarkersRepo.cpp
+        src/database/WarpExitRepo.cpp
 
         include/database/DatabaseManager.h
         src/database/DatabaseManager.cpp
@@ -841,6 +847,8 @@ set(ENGINE_SOURCES
         src/engine/services/RouteService.cpp
         include/engine/services/WarpService.h
         src/engine/services/WarpService.cpp
+        include/engine/services/WarpRotationService.h
+        src/engine/services/WarpRotationService.cpp
         include/engine/tests/TestObserver.h
         include/engine/tests/TestRunner.h
         src/engine/tests/TestRunner.cpp
