@@ -1,0 +1,197 @@
+name: Throne windows-amd64 only
+
+# Scratch workflow for iterating on a branch in a fork: same steps as build-cpp's
+# windows-amd64 matrix leg, without the darwin/linux/arm64/legacy legs and without
+# the pack/docker/publish jobs. Delete this file once the change is ready.
+#
+# It runs on push on purpose: a workflow_dispatch entry only appears once this file
+# is on the default branch, while a push trigger works from the very first push.
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Version string baked into the build (not a git tag)"
+        required: false
+        default: "0.0.0-warp-rotate"
+
+concurrency:
+  group: windows-amd64-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Kept identical to build.yml so both workflows share one cache on this repository.
+  GO_VERSION: "1.27.3"
+  PROTOC_VERSION: "36.2"
+  CRONET_GO_REF: "2ee86b72426042457b8eb879ab32296f5752bf2f"
+  QT_VERSION: "6.12.0"
+
+jobs:
+  checks:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out sources
+        uses: actions/checkout@v7.0.1
+      - name: Checking the engine/UI boundary
+        run: cmake -DROOT=${{ github.workspace }} -P cmake/EngineBoundary.cmake
+      # lupdate links only Qt Core and Qt Qml.
+      - name: Install lupdate
+        uses: jurplel/install-qt-action@v4.5.0
+        with:
+          version: "6.12.0"
+          archives: qtbase qtdeclarative qttools icu
+          install-deps: false
+          cache: true
+          cache-key-prefix: QtCache-lupdate
+      - name: Checking translation coverage
+        run: python3 -I script/check_translations.py --lupdate "$QT_ROOT_DIR/bin/lupdate"
+
+  build-go:
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+    env:
+      DEST: ${{ github.workspace }}/deployment/windows-amd64
+    steps:
+      - name: Checking out sources
+        uses: actions/checkout@v7.0.1
+      - name: Cache Common Download
+        id: cache-common
+        uses: actions/cache@v6.1.0
+        with:
+          path: artifacts.tgz
+          key: CommonCache-windows-amd64-${{ hashFiles('script/build_go.sh', 'core/**') }}-${{ env.GO_VERSION }}-${{ env.CRONET_GO_REF }}
+      - name: Install Golang
+        if: steps.cache-common.outputs.cache-hit != 'true'
+        uses: actions/setup-go@v7.0.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: |
+            core/go.sum
+      - name: Install Protoc
+        if: steps.cache-common.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          curl -fLso "$RUNNER_TEMP/protoc.zip" "https://github.com/protocolbuffers/protobuf/releases/download/v$PROTOC_VERSION/protoc-$PROTOC_VERSION-linux-x86_64.zip"
+          unzip -q "$RUNNER_TEMP/protoc.zip" -d "$RUNNER_TEMP/protoc"
+          echo "$RUNNER_TEMP/protoc/bin" >> "$GITHUB_PATH"
+      - name: Installing protoc-gen-go
+        if: steps.cache-common.outputs.cache-hit != 'true'
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.12
+          go install google.golang.org/protobuf/cmd/protoc-gen-go-grpc@v1.6.2
+      - name: Build golang parts
+        if: steps.cache-common.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          GOOS=windows GOARCH=amd64 ./script/build_go.sh
+      - name: Tar files
+        if: steps.cache-common.outputs.cache-hit != 'true'
+        run: tar czf artifacts.tgz ./deployment
+      - name: Uploading Artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: Throne-${{ github.sha }}-Common-windows-amd64
+          path: artifacts.tgz
+          compression-level: 0
+
+  build-cpp:
+    permissions:
+      contents: read
+    needs:
+      - build-go
+    runs-on: windows-latest
+    env:
+      INPUT_VERSION: ${{ github.event.inputs.tag || '0.0.0-warp-rotate' }}
+      DEST: ${{ github.workspace }}/deployment/windows-amd64
+      DEST_SUFFIX: windows-amd64
+      ARCH: x64
+      LAUNCHER_ARGS: -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+    steps:
+      - name: Checking out sources
+        uses: actions/checkout@v7.0.1
+      - name: Checking out the web dashboard
+        uses: actions/checkout@v7.0.1
+        with:
+          repository: SagerNet/sing-box-dashboard
+          ref: gh-pages
+          path: dashboard-src
+      - name: Bundling the web dashboard
+        shell: bash
+        run: |
+          # Read-only pack files make this flaky on Windows; cmake filters .git out anyway.
+          rm -rf dashboard-src/.git || true
+          cp -R dashboard-src/. res/dashboard/
+          # cmake globs res/dashboard at configure time and silently ships nothing if it
+          # is empty, so fail here instead of releasing a build without the dashboard.
+          test -f res/dashboard/index.html
+      # What ilammy/msvc-dev-cmd did: export the environment vcvarsall.bat sets up to the later steps.
+      - name: Install MSVC compiler
+        shell: pwsh
+        env:
+          MSVC_ARCH: x64
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -prerelease -property installationPath
+          if (-not $vs) { throw 'Visual Studio not found' }
+          # A wrapper script keeps the quoted path away from PowerShell's cmd.exe argument quoting.
+          $bat = Join-Path $env:RUNNER_TEMP 'vcvars.cmd'
+          Set-Content -LiteralPath $bat -Encoding ascii -Value "@call `"$vs\VC\Auxiliary\Build\vcvarsall.bat`" $env:MSVC_ARCH >nul && set"
+          $vars = & $bat
+          # vcvarsall exits 0 even when it rejects the architecture.
+          if (-not ($vars -ceq "VSCMD_ARG_TGT_ARCH=$env:MSVC_ARCH")) { throw "vcvarsall.bat $env:MSVC_ARCH did not set up the $env:MSVC_ARCH tools" }
+          $changed = foreach ($line in $vars) {
+            $name, $value = $line -split '=', 2
+            if ($null -ne $value -and $value -cne [Environment]::GetEnvironmentVariable($name)) { "$name=$value" }
+          }
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value $changed
+      - name: Setup compiler cache
+        uses: hendrikmuhs/ccache-action@v1.2.24
+        with:
+          key: windows-amd64-${{ env.QT_VERSION }}
+          variant: sccache
+          max-size: 500M
+      - name: Download Artifacts
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: Throne-${{ github.sha }}-Common-windows-amd64
+          path: download-artifact
+      - name: Windows - Cache Qt and OpenSSL
+        id: cache-winqt
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            qt.7z
+            openssl.7z
+          key: WinQt-${{ env.QT_VERSION }}-x64
+      - name: Windows - Download Qt and OpenSSL
+        shell: bash
+        if: steps.cache-winqt.outputs.cache-hit != 'true'
+        run: |
+          curl -L -o qt.7z https://github.com/throneproj/buildqt/releases/download/Qt_${{ env.QT_VERSION }}/Qt_${{ env.QT_VERSION }}_x64.7z
+          curl -L -o openssl.7z https://github.com/throneproj/env_windows_legacy/releases/download/latest/openssl_x64.7z
+      - name: Windows - Generate MakeFile and Build
+        shell: bash
+        run: |
+          7z x qt.7z
+          7z x openssl.7z
+          export CMAKE_PREFIX_PATH=$PWD/Qt/lib/cmake
+          export OPENSSL_ROOT_DIR=$PWD/openssl
+          mkdir build
+          cd build
+          curl -fLso srslist.h "https://github.com/throneproj/routeprofiles/rule-set/srslist.h"
+          cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo $LAUNCHER_ARGS ..
+          ninja
+          cd ..
+          ./script/deploy_windows.sh
+      - name: Tar files
+        shell: bash
+        run: tar czf artifacts.tgz ./deployment
+      - name: Uploading Artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: Throne-${{ github.sha }}-windows-amd64
+          path: artifacts.tgz
+          compression-level: 0
