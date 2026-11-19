@@ -365,7 +365,7 @@ namespace Configs {
         // Child-first order: delete order matters once foreign keys are re-enabled.
         const std::vector<std::string> kProfileTables = {"profiles", "groups_order", "groups"};
         const std::vector<std::string> kRouteTables = {"route_rules", "route_profiles"};
-        const std::vector<std::string> kSettingsTables = {"settings", "markers"};
+        const std::vector<std::string> kSettingsTables = {"settings", "markers", "warp_exit_blacklist", "warp_endpoint_exit"};
         const std::vector<std::string> kOtpTables = {"otp_profiles"};
         const std::vector<std::string> kIpListTables = {"ip_list_entries", "ip_scans", "ip_lists"};
 
