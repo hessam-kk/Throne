@@ -70,6 +70,7 @@ class DialogVpnAuth;
 class DialogScanner;
 class DialogIpLists;
 class DialogRuleTester;
+class DialogWarpBlacklist;
 class CommandPalette;
 
 namespace Qv2ray::ui {
@@ -305,6 +306,10 @@ private:
     QIcon connectionCloseIcon;
     QIcon connectionExpandIcon;
     QIcon connectionCollapseIcon;
+    // WARP second-hop footer controls; hidden unless WARP is the active exit.
+    QToolButton *warpRotateButton = nullptr;
+    QToolButton *warpBlacklistButton = nullptr;
+    DialogWarpBlacklist *m_warpBlacklistDialog = nullptr;
     int toolTipID;
     class LiveChart *trafficChart = nullptr;
     QList<Stats::TrafficLine> m_trafficLines;
@@ -577,6 +582,10 @@ private:
     void setupTrafficGraph();
 
     void setupRoutingMenu();
+
+    void setupWarpFooter();
+    void refreshWarpFooter();
+    void openWarpBlacklist();
 
     void refresh_traffic_graph_settings();
 

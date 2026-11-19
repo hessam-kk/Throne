@@ -255,6 +255,7 @@ void MainWindow::refresh_status(const QString &traffic_update) {
     } else {
         ui->label_running->setToolTip({});
     }
+    refreshWarpFooter();
 
     const auto route = Configs::dataManager->routesRepo->GetRouteProfile(Configs::ActiveRouteId());
     const QString activeRouteName = (route && route->name != "Default") ? route->name : "";
