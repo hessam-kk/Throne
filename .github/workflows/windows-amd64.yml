@@ -181,7 +181,7 @@ jobs:
           export OPENSSL_ROOT_DIR=$PWD/openssl
           mkdir build
           cd build
-          curl -fLso srslist.h "https://github.com/throneproj/routeprofiles/rule-set/srslist.h"
+          curl -fLso srslist.h --retry 5 --retry-all-errors --retry-delay 2 "https://raw.githubusercontent.com/throneproj/routeprofiles/rule-set/srslist.h"
           cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo $LAUNCHER_ARGS ..
           ninja
           cd ..
