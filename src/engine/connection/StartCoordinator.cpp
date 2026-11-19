@@ -14,6 +14,7 @@
 #include "include/engine/connection/EngineState.h"
 #include "include/engine/services/AssetUpdates.h"
 #include "include/engine/services/StatsService.h"
+#include "include/engine/services/WarpRotationService.h"
 #include "include/engine/supervisor/CoreSupervisor.h"
 #include "include/engine/tests/TestRunner.h"
 #include "include/engine/vpn/VpnAuthController.h"
@@ -187,6 +188,9 @@ namespace Engine {
         };
         if (m_autoSelector->rankBeforeStart(ent, resolved.interactive, resume)) return;
 
+        // WARP's exit is chosen before the config is built: a blacklisted exit IP gets the next scanned endpoint.
+        if (const auto note = Engine::WarpRotationService::instance()->autoSkipBeforeStart(); !note.isEmpty()) MW_show_log(note);
+
         // Restart reasons noted after this point are newer than the config this start runs.
         const quint64 hintEpoch = m_state->restartEpoch;
         const auto result = Configs::BuildSingBoxConfig(ent);
@@ -315,6 +319,9 @@ namespace Engine {
                 emit statusChanged();
                 emit profileRowsChanged({ent->id});
                 emit startFinished(resolved.serial, resolved.profileId, StartOutcome::Started, {});
+
+                // Learns the WARP exit IP this endpoint produced, which a rotation and the next start read.
+                Engine::WarpRotationService::instance()->noteConnected();
 
                 // "Only route advertised network" rejects this probe.
                 if (exitIsEndpoint) return;
