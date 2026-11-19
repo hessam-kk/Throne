@@ -468,6 +468,33 @@
     </message>
 </context>
 <context>
+    <name>DialogWarpBlacklist</name>
+    <message>
+        <source>WARP Exit IP Blacklist</source>
+        <translation>فهرست سیاه IP خروجی WARP</translation>
+    </message>
+    <message>
+        <source>A checked IP is never used as the WARP exit. Unchecked entries are kept but ignored, so you can re-enable an IP once it works again.</source>
+        <translation>IP علامت‌خورده هرگز به‌عنوان خروجی WARP استفاده نمی‌شود. ورودی‌های بی‌علامت نگه داشته می‌شوند اما نادیده گرفته می‌شوند، بنابراین می‌توانید IP را پس از درست شدن دوباره فعال کنید.</translation>
+    </message>
+    <message>
+        <source>Exit IP, for example 104.28.0.1</source>
+        <translation>IP خروجی، برای نمونه 104.28.0.1</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>افزودن</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>حذف</translation>
+    </message>
+    <message>
+        <source>Select an entry to remove</source>
+        <translation>یک مورد را برای حذف انتخاب کنید</translation>
+    </message>
+</context>
+<context>
     <name>DnsServerListEdit</name>
     <message>
         <source>Drag to reorder</source>
@@ -504,6 +531,85 @@
     <message>
         <source>Add at least one server.</source>
         <translation>دست‌کم یک سرور بیفزایید.</translation>
+    </message>
+</context>
+<context>
+    <name>Engine::WarpRotationService</name>
+    <message>
+        <source>Enter a valid IPv4 or IPv6 address</source>
+        <translation>یک نشانی IPv4 یا IPv6 معتبر وارد کنید</translation>
+    </message>
+    <message>
+        <source>That IP is already listed; enable it in the list instead</source>
+        <translation>این IP از قبل در فهرست است؛ آن را در فهرست فعال کنید</translation>
+    </message>
+    <message>
+        <source>WARP is not the active exit</source>
+        <translation>WARP خروجی فعال نیست</translation>
+    </message>
+    <message>
+        <source>WARP has no device for this mode yet; register one in Routing Settings</source>
+        <translation>WARP برای این حالت هنوز دستگاهی ندارد؛ آن را در تنظیمات مسیریابی ثبت کنید</translation>
+    </message>
+    <message>
+        <source>Routing Settings is open; close it and try again</source>
+        <translation>تنظیمات مسیریابی باز است؛ آن را ببندید و دوباره تلاش کنید</translation>
+    </message>
+    <message>
+        <source>Start a profile with WARP as the exit first</source>
+        <translation>ابتدا نمایه‌ای با WARP به‌عنوان خروجی اجرا کنید</translation>
+    </message>
+    <message>
+        <source>WARP has no endpoint in Routing Settings yet, so there is no exit IP to blacklist</source>
+        <translation>WARP در تنظیمات مسیریابی هنوز نقطه پایانی ندارد، بنابراین IP خروجی برای مسدودسازی وجود ندارد</translation>
+    </message>
+    <message>
+        <source>No other scanned WARP endpoint is available; run a WARP scan for %1 first</source>
+        <translation>نقطه پایانی پویش‌شده دیگری برای WARP موجود نیست؛ ابتدا برای %1 یک پویش WARP اجرا کنید</translation>
+    </message>
+    <message>
+        <source>Could not read the current WARP exit IP, so nothing was blacklisted</source>
+        <translation>خواندن IP خروجی فعلی WARP ممکن نشد، بنابراین چیزی مسدود نشد</translation>
+    </message>
+    <message>
+        <source>Gave up after %1 endpoints; every exit IP was blacklisted or unreachable</source>
+        <translation>پس از %1 نقطه پایانی رها شد؛ همه IPهای خروجی در فهرست سیاه یا دسترس‌ناپذیر بودند</translation>
+    </message>
+    <message>
+        <source>No engine connection is available; rotation cancelled</source>
+        <translation>اتصال موتور در دسترس نیست؛ چرخش لغو شد</translation>
+    </message>
+    <message>
+        <source>The connection was stopped; rotation cancelled</source>
+        <translation>اتصال متوقف شد؛ چرخش لغو شد</translation>
+    </message>
+    <message>
+        <source>No scanned WARP endpoint is left to try; run a WARP scan in the scanner first</source>
+        <translation>هیچ نقطه پایانی پویش‌شده‌ای برای WARP باقی نمانده؛ ابتدا در پویشگر یک پویش WARP اجرا کنید</translation>
+    </message>
+    <message>
+        <source>Tried %1 endpoints; every exit IP was blacklisted or unreachable</source>
+        <translation>%1 نقطه پایانی آزمایش شد؛ همه IPهای خروجی در فهرست سیاه یا دسترس‌ناپذیر بودند</translation>
+    </message>
+    <message>
+        <source>The chain did not come up on %1</source>
+        <translation>زنجیره از %1 بالا نیامد</translation>
+    </message>
+    <message>
+        <source>No exit IP came back through %1</source>
+        <translation>هیچ IP خروجی از %1 برنگشت</translation>
+    </message>
+    <message>
+        <source>Every exit IP tried is blacklisted</source>
+        <translation>همه IPهای خروجی آزمایش‌شده در فهرست سیاه هستند</translation>
+    </message>
+    <message>
+        <source>Rotated to %1; the exit IP is %2</source>
+        <translation>به %1 تغییر یافت؛ IP خروجی %2 است</translation>
+    </message>
+    <message>
+        <source>Rotation cancelled</source>
+        <translation>چرخش لغو شد</translation>
     </message>
 </context>
 <context>
@@ -5440,6 +5546,26 @@ Error: %2</source>
     <message>
         <source>Toggle system proxy</source>
         <translation>تغییر وضعیت پروکسی سیستم</translation>
+    </message>
+    <message>
+        <source>Rotate IP</source>
+        <translation>تغییر IP</translation>
+    </message>
+    <message>
+        <source>Blacklist the current WARP exit IP and switch to another scanned endpoint</source>
+        <translation>IP خروجی فعلی WARP را به فهرست سیاه بیفزایید و به نقطه پایانی پویش‌شده دیگری بروید</translation>
+    </message>
+    <message>
+        <source>Blacklist</source>
+        <translation>فهرست سیاه</translation>
+    </message>
+    <message>
+        <source>Choose which WARP exit IPs must never be used</source>
+        <translation>انتخاب کنید کدام IPهای خروجی WARP هرگز استفاده نشوند</translation>
+    </message>
+    <message>
+        <source>Rotating...</source>
+        <translation>در حال تغییر…</translation>
     </message>
 </context>
 <context>

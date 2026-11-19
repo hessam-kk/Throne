@@ -5885,6 +5885,33 @@ Close without saving?</source>
     </message>
 </context>
 <context>
+    <name>DialogWarpBlacklist</name>
+    <message>
+        <source>WARP Exit IP Blacklist</source>
+        <translation>WARP 出口 IP 黑名单</translation>
+    </message>
+    <message>
+        <source>A checked IP is never used as the WARP exit. Unchecked entries are kept but ignored, so you can re-enable an IP once it works again.</source>
+        <translation>勾选的 IP 永远不会用作 WARP 出口。未勾选的条目会保留但不生效，因此某个 IP 恢复正常后可以重新启用。</translation>
+    </message>
+    <message>
+        <source>Exit IP, for example 104.28.0.1</source>
+        <translation>出口 IP，例如 104.28.0.1</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>添加</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <source>Select an entry to remove</source>
+        <translation>请选择要移除的条目</translation>
+    </message>
+</context>
+<context>
     <name>DnsServerListEdit</name>
     <message>
         <source>Drag to reorder</source>
@@ -9418,6 +9445,85 @@ Close without saving?</source>
     </message>
 </context>
 <context>
+    <name>Engine::WarpRotationService</name>
+    <message>
+        <source>Enter a valid IPv4 or IPv6 address</source>
+        <translation>请输入有效的 IPv4 或 IPv6 地址</translation>
+    </message>
+    <message>
+        <source>That IP is already listed; enable it in the list instead</source>
+        <translation>该 IP 已在列表中，请在列表中启用它</translation>
+    </message>
+    <message>
+        <source>WARP is not the active exit</source>
+        <translation>WARP 不是当前的出口</translation>
+    </message>
+    <message>
+        <source>WARP has no device for this mode yet; register one in Routing Settings</source>
+        <translation>WARP 在此模式下还没有设备，请先在路由设置中注册</translation>
+    </message>
+    <message>
+        <source>Routing Settings is open; close it and try again</source>
+        <translation>路由设置已打开，请关闭后重试</translation>
+    </message>
+    <message>
+        <source>Start a profile with WARP as the exit first</source>
+        <translation>请先启动一个以 WARP 作为出口的配置档</translation>
+    </message>
+    <message>
+        <source>WARP has no endpoint in Routing Settings yet, so there is no exit IP to blacklist</source>
+        <translation>路由设置中还没有 WARP 端点，因此没有可加入黑名单的出口 IP</translation>
+    </message>
+    <message>
+        <source>No other scanned WARP endpoint is available; run a WARP scan for %1 first</source>
+        <translation>没有其他已扫描的 WARP 端点可用，请先对 %1 运行 WARP 扫描</translation>
+    </message>
+    <message>
+        <source>Could not read the current WARP exit IP, so nothing was blacklisted</source>
+        <translation>无法读取当前的 WARP 出口 IP，因此未加入黑名单</translation>
+    </message>
+    <message>
+        <source>Gave up after %1 endpoints; every exit IP was blacklisted or unreachable</source>
+        <translation>尝试 %1 个端点后放弃：所有出口 IP 都已被拉黑或无法访问</translation>
+    </message>
+    <message>
+        <source>No engine connection is available; rotation cancelled</source>
+        <translation>引擎连接不可用，已取消轮换</translation>
+    </message>
+    <message>
+        <source>The connection was stopped; rotation cancelled</source>
+        <translation>连接已停止，已取消轮换</translation>
+    </message>
+    <message>
+        <source>No scanned WARP endpoint is left to try; run a WARP scan in the scanner first</source>
+        <translation>没有可继续尝试的已扫描 WARP 端点，请先在扫描器中运行 WARP 扫描</translation>
+    </message>
+    <message>
+        <source>Tried %1 endpoints; every exit IP was blacklisted or unreachable</source>
+        <translation>已尝试 %1 个端点：所有出口 IP 都已被拉黑或无法访问</translation>
+    </message>
+    <message>
+        <source>The chain did not come up on %1</source>
+        <translation>链路未能通过 %1 建立</translation>
+    </message>
+    <message>
+        <source>No exit IP came back through %1</source>
+        <translation>未能通过 %1 获取出口 IP</translation>
+    </message>
+    <message>
+        <source>Every exit IP tried is blacklisted</source>
+        <translation>尝试过的所有出口 IP 都已被拉黑</translation>
+    </message>
+    <message>
+        <source>Rotated to %1; the exit IP is %2</source>
+        <translation>已切换到 %1，出口 IP 为 %2</translation>
+    </message>
+    <message>
+        <source>Rotation cancelled</source>
+        <translation>已取消轮换</translation>
+    </message>
+</context>
+<context>
     <name>GlobalHotkeys</name>
     <message>
         <source>This key can&apos;t be used in a global hotkey.</source>
@@ -11340,6 +11446,26 @@ Error: %2</source>
     <message>
         <source>Export Config</source>
         <translation>导出配置</translation>
+    </message>
+    <message>
+        <source>Rotate IP</source>
+        <translation>更换 IP</translation>
+    </message>
+    <message>
+        <source>Blacklist the current WARP exit IP and switch to another scanned endpoint</source>
+        <translation>将当前 WARP 出口 IP 加入黑名单，并切换到另一个已扫描的端点</translation>
+    </message>
+    <message>
+        <source>Blacklist</source>
+        <translation>黑名单</translation>
+    </message>
+    <message>
+        <source>Choose which WARP exit IPs must never be used</source>
+        <translation>选择绝不允许使用的 WARP 出口 IP</translation>
+    </message>
+    <message>
+        <source>Rotating...</source>
+        <translation>正在更换…</translation>
     </message>
 </context>
 <context>

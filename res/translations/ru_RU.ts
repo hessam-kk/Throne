@@ -5935,6 +5935,33 @@ Close without saving?</source>
     </message>
 </context>
 <context>
+    <name>DialogWarpBlacklist</name>
+    <message>
+        <source>WARP Exit IP Blacklist</source>
+        <translation>Чёрный список IP выхода WARP</translation>
+    </message>
+    <message>
+        <source>A checked IP is never used as the WARP exit. Unchecked entries are kept but ignored, so you can re-enable an IP once it works again.</source>
+        <translation>Отмеченный IP никогда не используется как выход WARP. Неотмеченные записи сохраняются, но игнорируются, поэтому IP можно снова включить, когда он заработает.</translation>
+    </message>
+    <message>
+        <source>Exit IP, for example 104.28.0.1</source>
+        <translation>IP выхода, например 104.28.0.1</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>Select an entry to remove</source>
+        <translation>Выберите запись для удаления</translation>
+    </message>
+</context>
+<context>
     <name>DnsServerListEdit</name>
     <message>
         <source>Drag to reorder</source>
@@ -9498,6 +9525,85 @@ Close without saving?</source>
     </message>
 </context>
 <context>
+    <name>Engine::WarpRotationService</name>
+    <message>
+        <source>Enter a valid IPv4 or IPv6 address</source>
+        <translation>Введите корректный адрес IPv4 или IPv6</translation>
+    </message>
+    <message>
+        <source>That IP is already listed; enable it in the list instead</source>
+        <translation>Этот IP уже в списке; включите его в списке</translation>
+    </message>
+    <message>
+        <source>WARP is not the active exit</source>
+        <translation>WARP не является активным выходом</translation>
+    </message>
+    <message>
+        <source>WARP has no device for this mode yet; register one in Routing Settings</source>
+        <translation>Для этого режима WARP ещё нет устройства; зарегистрируйте его в настройках маршрутизации</translation>
+    </message>
+    <message>
+        <source>Routing Settings is open; close it and try again</source>
+        <translation>Окно настроек маршрутизации открыто; закройте его и повторите попытку</translation>
+    </message>
+    <message>
+        <source>Start a profile with WARP as the exit first</source>
+        <translation>Сначала запустите профиль с WARP в качестве выхода</translation>
+    </message>
+    <message>
+        <source>WARP has no endpoint in Routing Settings yet, so there is no exit IP to blacklist</source>
+        <translation>В настройках маршрутизации ещё нет эндпоинта WARP, поэтому блокировать нечего</translation>
+    </message>
+    <message>
+        <source>No other scanned WARP endpoint is available; run a WARP scan for %1 first</source>
+        <translation>Других просканированных эндпоинтов WARP нет; сначала запустите сканирование WARP для %1</translation>
+    </message>
+    <message>
+        <source>Could not read the current WARP exit IP, so nothing was blacklisted</source>
+        <translation>Не удалось прочитать текущий IP выхода WARP, поэтому ничего не заблокировано</translation>
+    </message>
+    <message>
+        <source>Gave up after %1 endpoints; every exit IP was blacklisted or unreachable</source>
+        <translation>После %1 эндпоинтов попытки прекращены: все IP выхода были в чёрном списке или недоступны</translation>
+    </message>
+    <message>
+        <source>No engine connection is available; rotation cancelled</source>
+        <translation>Нет подключения к движку; смена отменена</translation>
+    </message>
+    <message>
+        <source>The connection was stopped; rotation cancelled</source>
+        <translation>Соединение остановлено; смена отменена</translation>
+    </message>
+    <message>
+        <source>No scanned WARP endpoint is left to try; run a WARP scan in the scanner first</source>
+        <translation>Не осталось просканированных эндпоинтов WARP; сначала запустите сканирование WARP в сканере</translation>
+    </message>
+    <message>
+        <source>Tried %1 endpoints; every exit IP was blacklisted or unreachable</source>
+        <translation>Проверено эндпоинтов: %1; все IP выхода были в чёрном списке или недоступны</translation>
+    </message>
+    <message>
+        <source>The chain did not come up on %1</source>
+        <translation>Цепочка не поднялась через %1</translation>
+    </message>
+    <message>
+        <source>No exit IP came back through %1</source>
+        <translation>Через %1 не пришёл IP выхода</translation>
+    </message>
+    <message>
+        <source>Every exit IP tried is blacklisted</source>
+        <translation>Все проверенные IP выхода в чёрном списке</translation>
+    </message>
+    <message>
+        <source>Rotated to %1; the exit IP is %2</source>
+        <translation>Выполнен переход на %1; IP выхода %2</translation>
+    </message>
+    <message>
+        <source>Rotation cancelled</source>
+        <translation>Смена отменена</translation>
+    </message>
+</context>
+<context>
     <name>GlobalHotkeys</name>
     <message>
         <source>Global hotkeys are not supported in this desktop session.</source>
@@ -11426,6 +11532,26 @@ Error: %2</source>
     <message>
         <source>Export Config</source>
         <translation>Экспортировать конфиг</translation>
+    </message>
+    <message>
+        <source>Rotate IP</source>
+        <translation>Сменить IP</translation>
+    </message>
+    <message>
+        <source>Blacklist the current WARP exit IP and switch to another scanned endpoint</source>
+        <translation>Добавить текущий IP выхода WARP в чёрный список и перейти на другой просканированный эндпоинт</translation>
+    </message>
+    <message>
+        <source>Blacklist</source>
+        <translation>Чёрный список</translation>
+    </message>
+    <message>
+        <source>Choose which WARP exit IPs must never be used</source>
+        <translation>Выберите IP выхода WARP, которые нельзя использовать</translation>
+    </message>
+    <message>
+        <source>Rotating...</source>
+        <translation>Смена…</translation>
     </message>
 </context>
 <context>
